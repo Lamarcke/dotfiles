@@ -1,4 +1,5 @@
 lvim.plugins = {
+
     {
         "phaazon/hop.nvim",
         event = "BufRead",
@@ -12,14 +13,6 @@ lvim.plugins = {
             require("nvim-ts-autotag").setup()
         end,
     },
-    -- {
-    --     "ray-x/lsp_signature.nvim",
-    --     event = "BufRead",
-    --     config = function()
-    --         local lsp_signature = require("lsp_signature")
-    --         lsp_signature.on_attach()
-    --     end,
-    -- },
     {
         "folke/trouble.nvim",
         dependencies = { "nvim-tree/nvim-web-devicons" },
@@ -33,50 +26,48 @@ lvim.plugins = {
         "zbirenbaum/copilot.lua",
         event = "InsertEnter",
         config = function()
-            vim.defer_fn(function()
-                require("copilot").setup({
-                    panel = {
-                        enabled = true,
-                        auto_refresh = false,
-                        keymap = {
-                            jump_prev = "[[",
-                            jump_next = "]]",
-                            accept = "<CR>",
-                            refresh = "gr",
-                            open = "<M-CR>"
-                        },
-                        layout = {
-                            position = "bottom", -- | top | left | right
-                            ratio = 0.4
-                        },
+            require("copilot").setup({
+                panel = {
+                    enabled = true,
+                    auto_refresh = false,
+                    keymap = {
+                        jump_prev = "[[",
+                        jump_next = "]]",
+                        accept = "<CR>",
+                        refresh = "gr",
+                        open = "<M-CR>"
                     },
-                    suggestion = {
-                        enabled = true,
-                        auto_trigger = true,
-                        debounce = 75,
-                        keymap = {
-                            accept = "<Tab>",
-                            accept_word = false,
-                            accept_line = false,
-                            next = "<M-]>",
-                            prev = "<M-[>",
-                            dismiss = "<C-]>",
-                        },
+                    layout = {
+                        position = "bottom", -- | top | left | right
+                        ratio = 0.4
                     },
-                    filetypes = {
-                        markdown = false,
-                        help = false,
-                        gitcommit = false,
-                        gitrebase = false,
-                        hgcommit = false,
-                        svn = false,
-                        cvs = false,
-                        ["."] = false,
+                },
+                suggestion = {
+                    enabled = true,
+                    auto_trigger = true,
+                    debounce = 75,
+                    keymap = {
+                        accept = "<Tab>",
+                        accept_word = false,
+                        accept_line = false,
+                        next = "<M-]>",
+                        prev = "<M-[>",
+                        dismiss = "<C-]>",
                     },
-                    copilot_node_command = 'node', -- Node.js version must be > 16.x
-                    server_opts_overrides = {},
-                })                                 -- https://github.com/zbirenbaum/copilot.lua/blob/master/README.md#setup-and-configuration
-            end, 100)
+                },
+                filetypes = {
+                    markdown = false,
+                    help = false,
+                    gitcommit = false,
+                    gitrebase = false,
+                    hgcommit = false,
+                    svn = false,
+                    cvs = false,
+                    ["."] = false,
+                },
+                copilot_node_command = 'node', -- Node.js version must be > 16.x
+                server_opts_overrides = {},
+            })                                 -- https://github.com/zbirenbaum/copilot.lua/blob/master/README.md#setup-and-configuration
         end,
     },
     {
@@ -84,6 +75,30 @@ lvim.plugins = {
         dependencies = {
             'nvim-lua/plenary.nvim'
         }
+    },
+    {
+        "nvim-telescope/telescope-frecency.nvim",
+        config = function()
+            require("telescope").load_extension("frecency")
+            lvim.builtin.telescope.extensions["frecency"] = {
+
+            }
+        end,
+        dependencies = { "kkharji/sqlite.lua" }
+    },
+    {
+        "kylechui/nvim-surround",
+        version = "*", -- Use for stability; omit to use `main` branch for the latest features
+        event = "VeryLazy",
+        config = function()
+            require("nvim-surround").setup({
+                -- Configuration here, or leave empty to use defaults
+            })
+        end
+    },
+    {
+        'stevearc/dressing.nvim',
+        opts = {},
     },
 }
 
@@ -97,7 +112,7 @@ lvim.builtin.telescope.defaults.layout_strategy = "horizontal"
 lvim.builtin.telescope.defaults.borderchars = { "─", "│", "─", "│", "╭", "╮", "╯", "╰" }
 lvim.builtin.telescope.defaults.layout_config = {
     horizontal = {
-        width = 0.7,
+        width = 0.9,
         height = 0.9,
         preview_width = 0.6,
     },

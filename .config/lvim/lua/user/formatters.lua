@@ -4,5 +4,8 @@ formatters.setup {
         command = "prettier",
         filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" },
     },
+    {
+        command = "black",
+        filetypes = { "python" },
+    }
 }
-
