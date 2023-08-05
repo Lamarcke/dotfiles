@@ -31,7 +31,7 @@ lvim.plugins = {
     {
         "rebelot/kanagawa.nvim"
     },
-    { "catppuccin/nvim", name = "catppuccin", priority = 1000 },
+    { "catppuccin/nvim",           name = "catppuccin",                       priority = 1000 },
     {
         "zbirenbaum/copilot.lua",
         event = "InsertEnter",
@@ -173,6 +173,7 @@ lvim.plugins = {
             })
         end
     },
+    { "mxsdev/nvim-dap-vscode-js", dependencies = { "mfussenegger/nvim-dap" } }
 }
 
 
