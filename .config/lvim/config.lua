@@ -3,6 +3,7 @@
 -- Forum: https://www.reddit.com/r/lunarvim/
 -- Discord: https://discord.com/invite/Xb9B4Ny
 
+require("user.lsp")
 require("user.plugins")
 require("user.keymaps")
 require("user.prefs")

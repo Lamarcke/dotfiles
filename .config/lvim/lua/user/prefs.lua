@@ -3,7 +3,6 @@ vim.opt.relativenumber = true
 vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 
-
 vim.opt.clipboard = "unnamed,unnamedplus"
 vim.opt.autoread = true
 
@@ -31,5 +30,5 @@ vim.opt.signcolumn = "yes"
 
 -- lvim
 lvim.format_on_save = true
-lvim.builtin.bufferline.active = false
+-- lvim.builtin.bufferline.active = false
 lvim.colorscheme = "kanagawa"
