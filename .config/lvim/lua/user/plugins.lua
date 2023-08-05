@@ -1,7 +1,15 @@
 local utils = require("user.utils")
 
+-- For telescope-related plugins, make sure to use this syntax in layout_config:
+-- layout_config = {
+--   [name] = {
+--      width = ...
+--      ...
+--   }
+-- }
+-- Where "name" is the name of the layout, e.g. "horizontal", "vertical", "center", etc.
+-- This is telescope stuff, not my fault :P
 lvim.plugins = {
-
     {
         "phaazon/hop.nvim",
         event = "BufRead",
@@ -74,13 +82,30 @@ lvim.plugins = {
     },
     {
         "nvim-telescope/telescope-frecency.nvim",
+        dependencies = { "kkharji/sqlite.lua" },
         config = function()
-            require("telescope").load_extension("frecency")
+            local telescope = require("telescope")
             lvim.builtin.telescope.extensions["frecency"] = {
+                show_scores = false,
+                show_unindexed = true,
+                ignore_patterns = { "*.git/*", "*/tmp/*" },
+                previewer = false,
+                layout_strategy = "vertical",
+                layout_config = {
+                    vertical = {
+                        preview_height = 0,
+                        previewer = false,
+                    },
+                    horizontal = {
+                        previewer = false,
+                        preview_height = 0,
+                        preview_width = 0,
+                    }
+                }
 
             }
-        end,
-        dependencies = { "kkharji/sqlite.lua" }
+            telescope.load_extension("frecency")
+        end
     },
     {
         "kylechui/nvim-surround",
@@ -115,11 +140,39 @@ lvim.plugins = {
         }
     },
     {
+        "debugloop/telescope-undo.nvim",
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+        },
+        config = function()
+            lvim.builtin.telescope.extensions["undo"] = {
+                initial_mode = "normal",
+
+                layout_strategy = "horizontal",
+                layout_config = {
+                    horizontal = {
+                        preview_width = 0.8,
+                    },
+                },
+            }
+            require("telescope").load_extension("undo")
+        end
+    },
+    {
         "pmizio/typescript-tools.nvim",
         dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-        opts = {},
+        config = function()
+            --  Make sure to remove the default ts-server configuration from lvim
+            --  see 'user.lsp'
+            local typescript = require("typescript-tools")
+            typescript.setup({
+                publish_diagnostic_on = "change",
+                settings = {
+                    expose_as_code_action = { "fix_all", "add_missing_imports", "remove_unused" },
+                }
+            })
+        end
     },
-
 }
 
 
@@ -150,13 +203,49 @@ lvim.builtin.telescope.defaults.layout_config = {
     },
 }
 
+
+local lvim_pickers = lvim.builtin.telescope.pickers
+
+lvim_pickers.find_files = {
+    theme = "dropdown",
+    previewer = false,
+}
+
+lvim_pickers.buffers = {
+    theme = "dropdown",
+    previewer = false,
+    initial_mode = "normal",
+}
+
+lvim_pickers.lsp_references = {
+    theme = "dropdown",
+    initial_mode = "normal",
+}
+
+lvim_pickers.lsp_definitions = {
+    theme = "dropdown",
+    initial_mode = "normal",
+}
+
+lvim_pickers.lsp_declarations = {
+    theme = "dropdown",
+    initial_mode = "normal",
+}
+
+lvim_pickers.lsp_implementations = {
+    theme = "dropdown",
+    initial_mode = "normal",
+}
+
 -- Alpha dashboard stuff
 --
--- Custom banner
--- Courtesy of https://github.com/MaximilianLloyd/ascii-lua-table
 
+-- Use frecency instead of the default telescope oldfiles
 lvim.builtin.alpha.dashboard.section.buttons.entries[4] = {
     "r", lvim.icons.ui.History .. "  Recent files", ":Telescope frecency<CR>"
 }
 -- Replaces the default function that defines a value for the header with a custom one:
+-- The default code is here: https://github.com/LunarVim/LunarVim/blob/master/lua/lvim/core/alpha/dashboard.lua#L89
+-- removing the function call to break your telescope.
+-- why? no idea, just don't touch it lol.
 lvim.builtin.alpha.dashboard.section.header.val = utils.get_responsive_header()

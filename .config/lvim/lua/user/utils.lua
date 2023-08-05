@@ -1,5 +1,7 @@
 local M = {}
 
+-- Custom banner
+-- Courtesy of https://github.com/MaximilianLloyd/ascii-lua-table
 local banner = {
     "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⣤⣤⣶⣶⣶⣶⣶⣶⣶⣦⣤⣄⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
     "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣴⣾⣿⠿⠛⠛⠉⠉⠉⠉⠉⠉⠉⠙⠛⠻⢿⣿⣶⣤⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
@@ -42,14 +44,8 @@ local banner_small = {
     "                                                         ░                  "
 }
 
-M.dap_continue = function()
-    if vim.fn.filereadable('.vscode/launch.json') then
-        require('dap.ext.vscode').load_launchjs()
-    end
-    require('dap').continue()
-end
-
 M.get_responsive_header = function()
+    -- As responsive as "only updates on startup" can be lol
     local width = vim.fn.winwidth(0)
     if width > 120 then
         return banner
@@ -58,6 +54,14 @@ M.get_responsive_header = function()
     else
         return nil
     end
+end
+
+M.load_telescope_extensions = function(telescope)
+    telescope.extensions["frecency"] = {
+    }
+    telescope.extensions["undo"] = {}
+    telescope.load_extension("frecency")
+    telescope.load_extension("undo")
 end
 
 
