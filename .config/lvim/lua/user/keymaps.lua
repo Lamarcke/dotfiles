@@ -5,6 +5,7 @@
 -- Delete to oblivion
 -- cut with visual mode + x instead
 vim.keymap.set('n', 'd', '"_d', { noremap = true })
+vim.keymap.set('n', 'D', '"_D', { noremap = true })
 
 vim.keymap.set({ 'n' }, 'ga', function()
     vim.lsp.buf.code_action()
