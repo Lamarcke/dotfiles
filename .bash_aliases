@@ -1,1 +1,0 @@
-alias nvim="lvim"
