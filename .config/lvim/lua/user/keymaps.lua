@@ -11,6 +11,7 @@ vim.keymap.set({ 'v', 'n' }, 'ga', function()
     vim.lsp.buf.code_action()
 end, { silent = true, noremap = true, desc = 'Code actions' })
 
+
 -- Allows for joins without moving the cursor
 vim.keymap.set("n", "J", "mzJ`z")
 
@@ -48,14 +49,6 @@ lvim.lsp.buffer_mappings.normal_mode["gr"] = { "<cmd>lua vim.lsp.buf.rename()<CR
 lvim.lsp.buffer_mappings.visual_mode["gr"] = { "<cmd>lua vim.lsp.buf.rename()<CR>", "Rename" }
 
 
--- Terminal
--- See here for reference:
--- https://github.com/LunarVim/LunarVim/blob/master/lua/lvim/core/terminal.lua#L4C3-L4C3
--- Use count + <M-F12> to open terminal a specific terminal
-lvim.builtin.terminal.open_mapping = "<M-F12>"
-lvim.builtin.terminal.direction = "float"
--- Removes the default M-1 - M-3 mappings
-lvim.builtin.terminal.execs = {}
 
 
 -- lvim's which key mappings already include "<leader>" as a prefix
@@ -77,6 +70,7 @@ lvim.builtin.which_key.mappings["f"]["u"] = { "<Cmd>lua require('telescope').ext
     "Undo tree" }
 
 -- Trouble mappings
+-- p for "problems"
 lvim.builtin.which_key.mappings["t"] = {
     name = "Diagnostics",
     t = { "<cmd>TroubleToggle<cr>", "trouble" },
@@ -87,6 +81,19 @@ lvim.builtin.which_key.mappings["t"] = {
     r = { "<cmd>TroubleToggle lsp_references<cr>", "references" },
 }
 
+-- Neotest mappings
+
+-- lvim.builtin.which_key.mappings["t"] = {
+--     name = "Test",
+--     t = {
+--         "function() require('neotest ').run.run(vim.fn.expand(" % ")) end", "Test file"
+--     }
+
+
+-- }
+
+lvim.builtin.which_key.mappings["w"] = { "<cmd>wa!<CR>", "Save all" }
+
 -- Buffer whichkeys are too long
 -- use the ones from the start of this file
 lvim.builtin.which_key.mappings["b"] = nil
@@ -96,3 +103,8 @@ lvim.builtin.which_key.mappings["e"] = nil
 
 -- Alpha mappings
 -- lvim.builtin.alpha.dashboard.config
+--
+
+-- nvim-dap is too much trouble, just use something else to debug visually
+-- The actual plugin is removed at the "user.plugins" file
+lvim.builtin.which_key.mappings["d"] = nil

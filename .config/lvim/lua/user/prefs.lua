@@ -27,6 +27,7 @@ vim.opt.termguicolors = true
 vim.opt.scrolloff = 8
 vim.opt.signcolumn = "yes"
 
+vim.opt.colorcolumn = "120"
 
 -- lvim
 lvim.format_on_save = true
