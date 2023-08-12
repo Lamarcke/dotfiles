@@ -1,0 +1,4 @@
+return {
+"rebelot/kanagawa.nvim"
+ 
+}
