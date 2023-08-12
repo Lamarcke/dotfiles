@@ -7,6 +7,10 @@
 vim.keymap.set('n', 'd', '"_d', { noremap = true })
 vim.keymap.set('n', 'D', '"_D', { noremap = true })
 
+-- better indenting
+vim.keymap.set("v", "<", "<gv")
+vim.keymap.set("v", ">", ">gv")
+
 -- Allows for joins without moving the cursor
 vim.keymap.set("n", "J", "mzJ`z")
 
@@ -60,9 +64,9 @@ vim.keymap.set('n', 'E', function() vim.diagnostic.open_float() end, { desc = "S
 vim.keymap.set('n', '[d', function() vim.diagnostic.goto_prev() end, { desc = "Go to previous error" })
 vim.keymap.set('n', ']d', function() vim.diagnostic.goto_next() end, { desc = "Go to next error" })
 
+
 -- WhichKey (leader) mappings
 local which_key_status, which_key = pcall(require, "which-key")
-
 if which_key_status then
     which_key.register({
         f = {
@@ -75,8 +79,14 @@ if which_key_status then
             r = { function() vim.lsp.buf.rename() end, "Rename" },
             a = { function() vim.lsp.buf.code_action() end, "Code actions" },
             f = { function() vim.lsp.buf.format() end, "Formatting" }
+        },
+        g = {
+            name = "Git",
+            p = {"<cmd>lua require('gitsigns').prev_hunk<CR>", "Previous Hunk"},
+            n = {"<cmd>lua require('gitsigns').next_hunk<CR>", "Next Hunk"},
+            P = {"<cmd>lua require('gitsigns').preview_hunk<CR>", "Preview Hunk"},
+        },
 
-        }
 
     }, { prefix = "<leader>" })
 end

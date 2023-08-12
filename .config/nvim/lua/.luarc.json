@@ -1,0 +1,31 @@
+{
+    "workspace.library": [
+        "/home/lamarck/.local/share/nvim/lazy/neodev.nvim/types/stable",
+        "/tmp/.mount_nvimtveBAH/usr/share/nvim/runtime/lua",
+        "/home/lamarck/.local/share/nvim/lazy/which-key.nvim/lua",
+        "/home/lamarck/.local/share/nvim/lazy/telescope.nvim/lua",
+        "/home/lamarck/.local/share/nvim/lazy/LuaSnip/lua",
+        "/home/lamarck/.local/share/nvim/lazy/plenary.nvim/lua",
+        "/home/lamarck/.local/share/nvim/lazy/nvim-lspconfig/lua",
+        "/home/lamarck/.local/share/nvim/lazy/cmp_luasnip/lua",
+        "/home/lamarck/.local/share/nvim/lazy/nvim-treesitter/lua",
+        "/home/lamarck/.local/share/nvim/lazy/cmp-nvim-lsp/lua",
+        "/home/lamarck/.local/share/nvim/lazy/lazy.nvim/lua",
+        "/home/lamarck/.local/share/nvim/lazy/telescope-fzf-native.nvim/lua",
+        "/home/lamarck/.local/share/nvim/lazy/oil.nvim/lua",
+        "/home/lamarck/.local/share/nvim/lazy/nvim-web-devicons/lua",
+        "/home/lamarck/.local/share/nvim/lazy/cmp-buffer/lua",
+        "/home/lamarck/.local/share/nvim/lazy/dressing.nvim/lua",
+        "/home/lamarck/.local/share/nvim/lazy/kanagawa.nvim/lua",
+        "/home/lamarck/.local/share/nvim/lazy/neodev.nvim/lua",
+        "/home/lamarck/.local/share/nvim/lazy/mason-lspconfig.nvim/lua",
+        "/home/lamarck/.local/share/nvim/lazy/cmp-path/lua",
+        "/home/lamarck/.local/share/nvim/lazy/fidget.nvim/lua",
+        "/home/lamarck/.local/share/nvim/lazy/mason.nvim/lua",
+        "/home/lamarck/.local/share/nvim/lazy/gitsigns.nvim/lua",
+        "/home/lamarck/.local/share/nvim/lazy/nvim-autopairs/lua",
+        "/home/lamarck/.local/share/nvim/lazy/nvim-cmp/lua",
+        "/home/lamarck/.config/nvim/lua",
+        "${3rd}/luv/library"
+    ]
+}
