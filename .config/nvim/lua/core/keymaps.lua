@@ -26,6 +26,22 @@ vim.keymap.set("n", "<A-k>", ":m .-2<CR>==")
 vim.keymap.set("v", "<A-k>", ":m '<-2<CR>gv=gv")
 vim.keymap.set("i", "<A-k>", "<Esc>:m .-2<CR>==gi")
 
+-- Move to window using the <ctrl> hjkl keys
+vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Go to left window", remap = true })
+vim.keymap.set("n", "<C-j>", "<C-w>j", { desc = "Go to lower window", remap = true })
+vim.keymap.set("n", "<C-k>", "<C-w>k", { desc = "Go to upper window", remap = true })
+vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Go to right window", remap = true })
+
+-- Resize window using <ctrl> arrow keys
+vim.keymap.set("n", "<C-Up>", "<cmd>resize +2<cr>", { desc = "Increase window height" })
+vim.keymap.set("n", "<C-Down>", "<cmd>resize -2<cr>", { desc = "Decrease window height" })
+vim.keymap.set("n", "<C-Left>", "<cmd>vertical resize -2<cr>", { desc = "Decrease window width" })
+vim.keymap.set("n", "<C-Right>", "<cmd>vertical resize +2<cr>", { desc = "Increase window width" })
+
+-- Remap for dealing with word wrap
+vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
+vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
+
 -- Ctrl D and U with cursor in the middle
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
@@ -35,12 +51,23 @@ vim.keymap.set("n", "<leader>w", "<cmd>wa!<CR>", { desc = "Save all" })
 -- Quit all
 vim.keymap.set("n", "<leader>q", "<cmd>qa!<CR>", { desc = "Quit all" })
 
+-- Bufferline mappings
+vim.keymap.set("n", "<M-l>", "<cmd>BufferLineCycleNext<CR>", { silent = true })
+vim.keymap.set("n", "<M-h>", "<cmd>BufferLineCyclePrev<CR>", { silent = true })
+vim.keymap.set("n", "<M-c>", "<cmd>BufferLinePick<CR>", { silent = true })
+vim.keymap.set("n", "<M-x>", "<cmd>BufferLineCloseLeft<CR>", { silent = true })
+vim.keymap.set("n", "<M-z>", "<cmd>BufferLineCloseRight<CR>", { silent = true })
+vim.keymap.set("n", "<M-q>", "<cmd>BufferKill<CR>", { silent = true })
+
+-- Hop
+vim.keymap.set('', 's', "<cmd>HopChar2<CR>", { remap = true })
+vim.keymap.set('', 'S', "<cmd>HopWord<CR>", { remap = true })
 
 -- Oil (file manager)
 local oil_status, oil = pcall(require, "oil")
 if oil_status then
     -- Custom function to automatically toggle Oil
-    vim.keymap.set("n", "<leader>e", function()
+    vim.keymap.set("n", "<M-1>", function()
         if vim.bo.filetype == 'oil' then
             oil.close()
         else
@@ -64,6 +91,13 @@ vim.keymap.set('n', 'E', function() vim.diagnostic.open_float() end, { desc = "S
 vim.keymap.set('n', '[d', function() vim.diagnostic.goto_prev() end, { desc = "Go to previous error" })
 vim.keymap.set('n', ']d', function() vim.diagnostic.goto_next() end, { desc = "Go to next error" })
 
+-- ToggleTerm
+-- I usually work with 2 terminals at most (one running the primary service, and another for running various commands)
+-- These are mapped similarly to Jetbrains' Run and Terminal tool windows keymaps.
+vim.keymap.set({ "n", "t", "x", "o" }, "<M-4>", "<cmd>1ToggleTerm size=20 dir=CWD direction=horizontal<CR>",
+    { desc = "Run window" })
+vim.keymap.set({ "n", "t", "x", "o" }, "<M-F12>", "<cmd>2ToggleTerm size=20 dir=CWD direction=horizontal<CR>",
+    { desc = "Terminal window" })
 
 -- WhichKey (leader) mappings
 local which_key_status, which_key = pcall(require, "which-key")
@@ -74,6 +108,9 @@ if which_key_status then
             f = { "<cmd>Telescope find_files<cr>", "Find File" },
             t = { "<cmd>Telescope live_grep<cr>", "Find Text" },
         },
+        s = {
+            name = "Services",
+        },
         r = {
             name = "LSP",
             r = { function() vim.lsp.buf.rename() end, "Rename" },
@@ -82,10 +119,26 @@ if which_key_status then
         },
         g = {
             name = "Git",
-            p = {"<cmd>lua require('gitsigns').prev_hunk<CR>", "Previous Hunk"},
-            n = {"<cmd>lua require('gitsigns').next_hunk<CR>", "Next Hunk"},
-            P = {"<cmd>lua require('gitsigns').preview_hunk<CR>", "Preview Hunk"},
+            p = { "<cmd>lua require('gitsigns').prev_hunk<CR>", "Previous Hunk" },
+            n = { "<cmd>lua require('gitsigns').next_hunk<CR>", "Next Hunk" },
+            P = { "<cmd>lua require('gitsigns').preview_hunk<CR>", "Preview Hunk" },
         },
+        d = {
+            name = "Diagnostics",
+            t = { "<cmd>TroubleToggle<cr>", "trouble" },
+            w = { "<cmd>TroubleToggle workspace_diagnostics<cr>", "workspace" },
+            d = { "<cmd>TroubleToggle document_diagnostics<cr>", "document" },
+            q = { "<cmd>TroubleToggle quickfix<cr>", "quickfix" },
+            l = { "<cmd>TroubleToggle loclist<cr>", "loclist" },
+            r = { "<cmd>TroubleToggle lsp_references<cr>", "references" },
+
+        },
+        p = {
+            name = "Plugins",
+            l = { "<cmd>Lazy<cr>", "Lazy" },
+            m = { "<cmd>Mason<cr>", "Mason" },
+
+        }
 
 
     }, { prefix = "<leader>" })

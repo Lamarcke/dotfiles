@@ -7,6 +7,11 @@ return {
             local telescope = require("telescope")
 
             telescope.setup({
+                pickers = {
+                    find_files = {
+                        previewer = false
+                    },
+                },
                 extensions = {
                     fzf = {
                         fuzzy = true,                   -- false will only do exact matching

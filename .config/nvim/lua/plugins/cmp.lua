@@ -1,3 +1,4 @@
+---@diagnostic disable: missing-fields
 return {
     -- Autocompletion
     'hrsh7th/nvim-cmp',
@@ -21,20 +22,23 @@ return {
         -- See `:help cmp`
         local cmp = require 'cmp'
         local luasnip = require 'luasnip'
+
         require('luasnip.loaders.from_vscode').lazy_load()
         luasnip.config.setup {}
 
-        -- luacheck: ignore
         cmp.setup({
+            -- Preselects the first item
             preselect = 'item',
             completion = {
                 completeopt = 'menu,menuone,noinsert'
             },
+
             snippet = {
                 expand = function(args)
                     luasnip.lsp_expand(args.body)
                 end,
             },
+
             mapping = cmp.mapping.preset.insert {
                 ['<C-n>'] = cmp.mapping.select_next_item(),
                 ['<C-p>'] = cmp.mapping.select_prev_item(),
@@ -45,9 +49,10 @@ return {
                     behavior = cmp.ConfirmBehavior.Replace,
                     select = true,
                 },
+                -- Tab is used by Copilot
                 ['<Tab>'] = cmp.mapping(function(fallback)
                     if cmp.visible() then
-                        cmp.select_next_item()
+                        return
                     elseif luasnip.expand_or_locally_jumpable() then
                         luasnip.expand_or_jump()
                     else
@@ -56,7 +61,7 @@ return {
                 end, { 'i', 's' }),
                 ['<S-Tab>'] = cmp.mapping(function(fallback)
                     if cmp.visible() then
-                        cmp.select_prev_item()
+                        return
                     elseif luasnip.locally_jumpable(-1) then
                         luasnip.jump(-1)
                     else

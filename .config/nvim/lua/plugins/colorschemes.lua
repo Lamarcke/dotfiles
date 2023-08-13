@@ -1,8 +1,8 @@
 return {
     {
         "rebelot/kanagawa.nvim",
+        priority = 1000,
         opts = {
-            transparent = true,
             overrides = function(colors)
                 local theme = colors.theme
                 return {
@@ -23,8 +23,17 @@ return {
             end,
 
         },
-        priority = 1000,
         lazy = false,
+    },
+    {
+        "folke/tokyonight.nvim",
+        lazy = false,
+        priority = 1000
+    },
+    {
+        "ellisonleao/gruvbox.nvim",
+        priority = 1000,
+        lazy = false
     }
 
 }
