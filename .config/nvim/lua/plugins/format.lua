@@ -26,5 +26,8 @@ return {
             }
 
         })
-    end
+    end,
+
+    -- Disabled in favor of null-ls for now.
+    enabled = false
 }

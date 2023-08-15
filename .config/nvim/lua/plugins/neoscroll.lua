@@ -3,5 +3,5 @@ return {
     opts = {
         hide_cursor = false
 
-    }
+    },
 }

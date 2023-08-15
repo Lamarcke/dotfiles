@@ -5,12 +5,13 @@ return {
         "JoosepAlviste/nvim-ts-context-commentstring"
     },
     lazy = false,
-    config = function()
-        local comment = require("Comment")
-        comment.setup({
-            -- Integration with nvim-ts-context-commentstring
-            -- Works specially well for JSX/TSX
-            pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
-        })
-    end
+    opts = function()
+        local commentstring_avail, commentstring =
+            pcall(require, "ts_context_commentstring.integrations.comment_nvim")
+        return commentstring_avail
+            and commentstring
+            and { pre_hook = commentstring.create_pre_hook() }
+            or {}
+    end,
+
 }

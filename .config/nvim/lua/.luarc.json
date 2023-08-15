@@ -27,5 +27,6 @@
         "/home/lamarck/.local/share/nvim/lazy/nvim-cmp/lua",
         "/home/lamarck/.config/nvim/lua",
         "${3rd}/luv/library"
-    ]
+    ],
+    "workspace.checkThirdParty": false
 }

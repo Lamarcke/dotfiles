@@ -1,10 +1,15 @@
+-- This file includes autocommands and usercommands
+--
 -- Some of these are excerpt from Lunarvim and Lazyvim
+-- Note: LspAttach event stuff is at /plugins/lsp.lua config.
+
+
 local function augroup(name)
     return vim.api.nvim_create_augroup("user_" .. name, { clear = true })
 end
 
 vim.api.nvim_create_user_command("BufferKill", function()
-    vim.cmd("bdelete")
+    vim.cmd("bdelete!")
 end, {})
 
 -- close some filetypes with <q>
@@ -34,14 +39,14 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 -- wrap and check for spell in text filetypes
-vim.api.nvim_create_autocmd("FileType", {
+--[[ vim.api.nvim_create_autocmd("FileType", {
     group = augroup("wrap_spell"),
     pattern = { "gitcommit", "markdown" },
     callback = function()
         vim.opt_local.wrap = true
         vim.opt_local.spell = true
     end,
-})
+}) ]]
 
 -- resize splits if window got resized
 vim.api.nvim_create_autocmd({ "VimResized" }, {
@@ -49,23 +54,6 @@ vim.api.nvim_create_autocmd({ "VimResized" }, {
     callback = function()
         vim.cmd("tabdo wincmd =")
     end,
-})
-
--- Terminal mappings
-vim.api.nvim_create_autocmd("TermOpen", {
-    pattern = {
-        "term://*"
-    },
-    callback = function()
-        local opts = { buffer = 0 }
-        vim.keymap.set('t', '<esc>', [[<C-\><C-n>]], opts)
-        vim.keymap.set('t', 'jk', [[<C-\><C-n>]], opts)
-        vim.keymap.set('t', '<C-h>', [[<Cmd>wincmd h<CR>]], opts)
-        vim.keymap.set('t', '<C-j>', [[<Cmd>wincmd j<CR>]], opts)
-        vim.keymap.set('t', '<C-k>', [[<Cmd>wincmd k<CR>]], opts)
-        vim.keymap.set('t', '<C-l>', [[<Cmd>wincmd l<CR>]], opts)
-        vim.keymap.set('t', '<C-w>', [[<C-\><C-n><C-w>]], opts)
-    end
 })
 
 --  Highlight on yank
