@@ -120,6 +120,14 @@ local function get_python_venv()
 	end
 end
 
+local function get_runtime_spec()
+	local buf_ft = vim.bo.filetype
+	if buf_ft == "python" then
+		return get_python_venv()
+	end
+	return nil
+end
+
 return {
 	"nvim-lualine/lualine.nvim",
 	event = { "VimEnter", "BufReadPost", "BufNewFile" },
@@ -146,14 +154,14 @@ return {
 			padding = 1,
 		}
 
-		local python_venv_component = {
-			get_python_venv,
+		local runtime_spec_component = {
+			get_runtime_spec,
 			color = {
-				fg = "#6CC644",
+				fg = "#6082B6",
 				bg = "#1E1E1E",
 			},
 			cond = function()
-				return vim.bo.filetype == "python"
+				return get_runtime_spec() ~= nil
 			end,
 		}
 		require("lualine").setup({
@@ -168,7 +176,7 @@ return {
 
 			sections = {
 				lualine_b = { "branch" },
-				lualine_c = { "diff", python_venv_component },
+				lualine_c = { "diff", runtime_spec_component },
 				lualine_x = {
 					"diagnostics",
 					attached_clients_component,

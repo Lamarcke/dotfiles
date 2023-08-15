@@ -95,10 +95,10 @@ return {
 					-- Checks if copilot is visible, and accept completion if it is
 					local copilot_available, copilot_suggestion = pcall(require, "copilot.suggestion")
 
-					if luasnip.expand_or_locally_jumpable() then
-						luasnip.expand_or_jump()
-					elseif copilot_available and copilot_suggestion.is_visible() then
+					if copilot_available and copilot_suggestion.is_visible() then
 						copilot_suggestion.accept()
+					elseif luasnip.expand_or_locally_jumpable() then
+						luasnip.expand_or_jump()
 					else
 						fallback()
 					end
