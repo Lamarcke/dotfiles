@@ -94,6 +94,32 @@ local function get_attached_clients()
 	return language_servers
 end
 
+-- Excerpt from Lunarvim
+local function get_python_venv()
+	local venv_cleanup = function(venv)
+		if string.find(venv, "/") then
+			local final_venv = venv
+			for w in venv:gmatch("([^/]+)") do
+				final_venv = w
+			end
+			venv = final_venv
+		end
+		return venv
+	end
+
+	if vim.bo.filetype == "python" then
+		-- This works for venv, poetry, conda, etc.
+		local venv = os.getenv("CONDA_DEFAULT_ENV") or os.getenv("VIRTUAL_ENV")
+		if venv then
+			local icons = require("nvim-web-devicons")
+			local py_icon, _ = icons.get_icon(".py")
+			return string.format(" " .. py_icon .. " (%s)", venv_cleanup(venv))
+		end
+		-- Avoid running expensive computation "like calling python3 -V" here.
+		return "(system)"
+	end
+end
+
 return {
 	"nvim-lualine/lualine.nvim",
 	event = { "VimEnter", "BufReadPost", "BufNewFile" },
@@ -111,6 +137,25 @@ return {
 				gui = "bold",
 			},
 		}
+
+		local spaces_component = {
+			function()
+				local shiftwidth = vim.api.nvim_buf_get_option(0, "shiftwidth")
+				return "󰌒 " .. shiftwidth
+			end,
+			padding = 1,
+		}
+
+		local python_venv_component = {
+			get_python_venv,
+			color = {
+				fg = "#6CC644",
+				bg = "#1E1E1E",
+			},
+			cond = function()
+				return vim.bo.filetype == "python"
+			end,
+		}
 		require("lualine").setup({
 			options = {
 				theme = "auto",
@@ -122,8 +167,15 @@ return {
 			},
 
 			sections = {
-				lualine_b = { "branch", "diff" },
-				lualine_x = { "diagnostics", attached_clients_component, copilot_component, "filetype" },
+				lualine_b = { "branch" },
+				lualine_c = { "diff", python_venv_component },
+				lualine_x = {
+					"diagnostics",
+					attached_clients_component,
+					copilot_component,
+					spaces_component,
+					"filetype",
+				},
 			},
 		})
 	end,
