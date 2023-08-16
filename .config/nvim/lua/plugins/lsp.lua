@@ -55,11 +55,19 @@ return {
 
 		-- Diagnostic message setup
 		vim.diagnostic.config({
+			-- Keep virtual text simple to avoid clutter
 			virtual_text = {
-				source = true,
+				signs = true,
+				severity_sort = true,
 			},
+			-- Use a custom format for the message in line diagnostics (E)
 			float = {
-				source = true,
+				signs = true,
+				severity_sort = true,
+				format = function(diagnostic)
+					return string.format("%s [%s] (%s)", diagnostic.message, diagnostic.code, diagnostic.source)
+				end,
+				suffix = "",
 			},
 		})
 

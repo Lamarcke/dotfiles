@@ -28,7 +28,7 @@ return {
 				additional_vim_regex_highlighting = false,
 				disable = { "bash" },
 			},
-			indent = { enable = true },
+			indent = { enable = false },
 			incremental_selection = {
 				enable = true,
 				keymaps = {

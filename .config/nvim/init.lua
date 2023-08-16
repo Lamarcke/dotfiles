@@ -26,3 +26,14 @@ require("lazy").setup({
 -- END LAZY STUFF
 
 require("core")
+
+local go_path = vim.fn.system("which go")
+local go_path = go_path:gsub("\n", "")
+local go_command = go_path .. " version"
+local go_version = vim.fn.system(go_command)
+if #go_version > 0 then
+	-- Match 'go' followed by any numbers until whitespace
+	go_version = go_version:match("go[%d%.]+")
+end
+
+print(go_version)

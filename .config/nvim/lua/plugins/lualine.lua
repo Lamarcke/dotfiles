@@ -1,4 +1,22 @@
+local icons = {
+	python = "",
+	node = "",
+	java = "",
+	go = "",
+}
+-- Used by the runtime spec component
+-- We cache the results of the runtime spec component so we don't have to run the
+-- expensive "--version" commands
+local runtime_cache = {
+	node = nil,
+	python = nil,
+	java = nil,
+	go = nil,
+}
+
 local spinners = { "⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷" }
+-- This stands for web development buffer selections i swear
+local web_dev_bs = { "javascript", "javascriptreact", "typescript", "typescriptreact" }
 
 local function copilot_indicator()
 	local client = vim.lsp.get_active_clients({ name = "copilot" })[1]
@@ -51,35 +69,6 @@ local function get_attached_clients()
 		end
 	end
 
-	-- Add linters (from nvim-lint)
-	-- local lint_s, lint = pcall(require, "lint")
-	-- if lint_s then
-	-- 	for ft_k, ft_v in pairs(lint.linters_by_ft) do
-	-- 		if type(ft_v) == "table" then
-	-- 			for _, linter in ipairs(ft_v) do
-	-- 				if buf_ft == ft_k then
-	-- 					table.insert(buf_client_names, linter)
-	-- 				end
-	-- 			end
-	-- 		elseif type(ft_v) == "string" then
-	-- 			if buf_ft == ft_k then
-	-- 				table.insert(buf_client_names, ft_v)
-	-- 			end
-	-- 		end
-	-- 	end
-	-- end
-	--
-	-- Add formatters (from formatter.nvim)
-	-- local formatter_s, _ = pcall(require, "formatter")
-	-- if formatter_s then
-	-- 	local formatter_util = require("formatter.util")
-	-- 	for _, formatter in ipairs(formatter_util.get_available_formatters_for_ft(buf_ft)) do
-	-- 		if formatter then
-	-- 			table.insert(buf_client_names, formatter)
-	-- 		end
-	-- 	end
-	-- end
-
 	-- This needs to be a string only table so we can use concat below
 	local unique_client_names = {}
 	for _, name in pairs(buf_client_names) do
@@ -107,24 +96,101 @@ local function get_python_venv()
 		return venv
 	end
 
-	if vim.bo.filetype == "python" then
-		-- This works for venv, poetry, conda, etc.
-		local venv = os.getenv("CONDA_DEFAULT_ENV") or os.getenv("VIRTUAL_ENV")
-		if venv then
-			local icons = require("nvim-web-devicons")
-			local py_icon, _ = icons.get_icon(".py")
-			return string.format(" " .. py_icon .. " (%s)", venv_cleanup(venv))
-		end
-		-- Avoid running expensive computation "like calling python3 -V" here.
-		return "(system)"
+	-- This works for venv, poetry, conda, etc.
+	local venv = os.getenv("CONDA_DEFAULT_ENV") or os.getenv("VIRTUAL_ENV")
+	local py_version = vim.fn.system("python3 -V")
+	py_version = py_version:gsub("\n", "")
+	py_version = py_version:gsub("Python ", "")
+
+	if venv then
+		return string.format("%s %s | %s", icons.python, venv_cleanup(venv), py_version)
 	end
+
+	return string.format("%s %s", icons.python, py_version)
 end
 
-local function get_runtime_spec()
-	local buf_ft = vim.bo.filetype
-	if buf_ft == "python" then
-		return get_python_venv()
+local function get_java_version()
+	local jdk_version = vim.fn.system("java --version 2>&1 | head -n 1")
+
+	if jdk_version == "" then
+		return nil
 	end
+	jdk_version = jdk_version:gsub(" (202%d-.-)$", "")
+
+	return string.format(icons.java .. " %s", jdk_version:gsub("\n", ""))
+end
+
+local function get_node_version()
+	local node_version = vim.fn.system("node --version")
+
+	if node_version == "" then
+		return nil
+	end
+
+	return string.format(icons.node .. " %s", node_version:gsub("\n", ""))
+end
+
+local function get_go_version()
+	local go_path = vim.fn.system("which go")
+	if go_path == "" then
+		return nil
+	end
+	go_path = go_path:gsub("\n", "")
+	local go_command = go_path .. " version"
+	local go_version = vim.fn.system(go_command)
+	if #go_version > 0 then
+		-- Match 'go' followed by any numbers until whitespace
+		go_version = go_version:match("go[%d%.]+")
+		go_version = go_version:gsub("go", "")
+	end
+
+	return string.format(icons.go .. " %s", go_version)
+end
+
+local function build_runtime_spec_component()
+	local buf_ft = vim.bo.filetype
+	if vim.tbl_contains(web_dev_bs, buf_ft) then
+		local node_version = runtime_cache.node or get_node_version()
+		runtime_cache.node = node_version
+		return {
+			node_version,
+			color = {
+				fg = "#f7df1e",
+				bg = "#1E1E1E",
+			},
+		}
+	elseif buf_ft == "python" then
+		local python_venv = runtime_cache.python or get_python_venv()
+		runtime_cache.python = python_venv
+		return {
+			python_venv,
+			color = {
+				fg = "#6082B6",
+				bg = "#1E1E1E",
+			},
+		}
+	elseif buf_ft == "java" then
+		local java_version = runtime_cache.java or get_java_version()
+		runtime_cache.java = java_version
+		return {
+			java_version,
+			color = {
+				fg = "#9b3928",
+				bg = "#1E1E1E",
+			},
+		}
+	elseif buf_ft == "go" then
+		local go_version = runtime_cache.go or get_go_version()
+		runtime_cache.go = go_version
+		return {
+			go_version,
+			color = {
+				fg = "#00ADD8",
+				bg = "#1E1E1E",
+			},
+		}
+	end
+
 	return nil
 end
 
@@ -155,22 +221,31 @@ return {
 		}
 
 		local runtime_spec_component = {
-			get_runtime_spec,
-			color = {
-				fg = "#6082B6",
-				bg = "#1E1E1E",
-			},
+			function()
+				local component = build_runtime_spec_component()
+				if component then
+					return component[1]
+				end
+			end,
+			color = function()
+				local component = build_runtime_spec_component()
+				if component then
+					return component.color
+				end
+			end,
 			cond = function()
-				return get_runtime_spec() ~= nil
+				local component = build_runtime_spec_component()
+				return component ~= nil and component[1] ~= nil
 			end,
 		}
+
 		require("lualine").setup({
 			options = {
 				theme = "auto",
 				globalstatus = true,
-				component_separators = { left = "|", right = "|" },
+				component_separators = { left = "", right = "" },
 				refresh = {
-					statusline = 250,
+					statusline = 200,
 				},
 			},
 
