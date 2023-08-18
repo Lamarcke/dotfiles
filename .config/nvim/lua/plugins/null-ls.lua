@@ -76,9 +76,6 @@ return {
 			handlers = {},
 		})
 
-		null_ls.setup({
-			-- Stuff not available on Mason
-			sources = {},
-		})
+		null_ls.setup({})
 	end,
 }

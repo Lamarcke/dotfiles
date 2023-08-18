@@ -68,17 +68,10 @@ vim.keymap.set("n", "<M-S-h>", "<cmd>BufferLineMovePrev<CR>", { silent = true })
 vim.keymap.set("n", "s", "<cmd>HopChar2<CR>", { remap = true })
 vim.keymap.set("n", "S", "<cmd>HopWord<CR>", { remap = true })
 
--- Oil (file manager)
-local oil_status, oil = pcall(require, "oil")
-if oil_status then
-	-- Custom function to automatically toggle Oil
-	vim.keymap.set("n", "<M-1>", function()
-		if vim.bo.filetype == "oil" then
-			oil.close()
-		else
-			oil.open()
-		end
-	end, { desc = "File navigation" })
+-- NvimTree (file manager)
+local tree_status, _ = pcall(require, "nvim-tree")
+if tree_status then
+	vim.keymap.set("n", "<M-1>", "<cmd>NvimTreeToggle<CR>", { desc = "File navigation" })
 end
 
 -- LSP mappings
@@ -157,7 +150,7 @@ if which_key_status then
 			l = { "<cmd>Telescope resume<cr>", "Resume last search" },
 			c = { "<cmd>Telescope colorscheme<cr>", "Pick colorscheme" },
 			p = { "<cmd>Telescope projects<cr>", "Projects" },
-			u = { "<cmd>Telescope undo<cr>", "Undo tree" },
+			u = { "<cmd>UndoTree Toggle<cr>", "Undo tree" },
 		},
 		s = {
 			name = "Services",

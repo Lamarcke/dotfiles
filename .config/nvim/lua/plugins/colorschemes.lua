@@ -28,10 +28,14 @@ return {
 		"folke/tokyonight.nvim",
 		lazy = false,
 		priority = 1000,
+		enabled = false,
 	},
 	{
 		"ellisonleao/gruvbox.nvim",
 		priority = 1000,
 		lazy = false,
+		enabled = false,
 	},
+	{ "EdenEast/nightfox.nvim", priority = 1000, enabled = false },
+	{ "catppuccin/nvim", name = "catppuccin", priority = 1000, enabled = false },
 }

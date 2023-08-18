@@ -103,7 +103,7 @@ local function get_python_venv()
 	py_version = py_version:gsub("Python ", "")
 
 	if venv then
-		return string.format("%s %s | %s", icons.python, venv_cleanup(venv), py_version)
+		return string.format("%s %s", icons.python, venv_cleanup(venv))
 	end
 
 	return string.format("%s %s", icons.python, py_version)

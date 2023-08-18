@@ -34,22 +34,33 @@ return {
 
 		mason_lspconfig.setup()
 
-		-- List of ignored servers (usually handled by external plugins)
+		-- Use this to avoid setting up servers you don't want
 		local ignored_servers = {
-			"tsserver", -- handled by typescript-tools
+			"tsserver",
 		}
 
 		mason_lspconfig.setup_handlers({
 			function(server_name)
-				for _, x in pairs(ignored_servers) do
-					if server_name == x then
-						return
-					end
+				if vim.tbl_contains(ignored_servers, server_name) then
+					return
 				end
-
 				require("lspconfig")[server_name].setup({
 					capabilities = capabilities,
 				})
+			end,
+			["tsserver"] = function()
+				local ts_tools_s, ts_tools = pcall(require, "typescript-tools")
+				if ts_tools_s then
+					ts_tools.setup({
+						settings = {
+							expose_as_code_action = {
+								"fix_all",
+								"add_missing_imports",
+								"remove_unused",
+							},
+						},
+					})
+				end
 			end,
 		})
 
