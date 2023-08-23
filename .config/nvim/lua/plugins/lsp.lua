@@ -60,6 +60,37 @@ return {
 							},
 						},
 					})
+				else
+					print("typescript-tools not installed, skipping and using default tsserver")
+					require("lspconfig")["tsserver"].setup({
+						capabilities = capabilities,
+					})
+				end
+			end,
+			["jdtls"] = function()
+				local jdtls_s, _ = pcall(require, "jdtls")
+				if jdtls_s then
+					vim.api.nvim_create_autocmd("FileType", {
+						pattern = { "java" },
+						callback = function()
+							require("jdtls").start_or_attach({
+								cmd = {
+									"jdtls",
+									"--jvm-arg=" .. string.format(
+										"-javaagent:%s",
+										vim.fn.expand("$MASON/share/jdtls/lombok.jar")
+									),
+								},
+								root_dir = vim.fs.dirname(
+									vim.fs.find({ "gradlew", ".git", "mvnw" }, { upward = true })[1]
+								),
+							})
+						end,
+					})
+				else
+					require("lspconfig")["jdtls"].setup({
+						capabilities = capabilities,
+					})
 				end
 			end,
 		})

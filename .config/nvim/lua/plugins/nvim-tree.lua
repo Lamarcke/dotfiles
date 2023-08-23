@@ -26,11 +26,18 @@ return {
 				show_on_dirs = false,
 				show_on_open_dirs = true,
 			},
-
 			actions = {
+				change_dir = {
+					enable = true,
+					global = true,
+				},
 				open_file = {
 					quit_on_open = true,
 				},
+			},
+			git = {
+				-- Disable ignoring files
+				ignore = false,
 			},
 		})
 		require("lsp-file-operations").setup()

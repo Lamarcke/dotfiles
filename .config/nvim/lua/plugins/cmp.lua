@@ -79,7 +79,7 @@ return {
 				ghost_text = false,
 			},
 
-			-- These mappings are activie even if cmp menu is not open!
+			-- These mappings are active even if cmp menu is not open!
 			mapping = cmp.mapping.preset.insert({
 				["<C-n>"] = cmp.mapping.select_next_item(select_opts),
 				["<C-p>"] = cmp.mapping.select_prev_item(select_opts),
@@ -97,6 +97,7 @@ return {
 
 					if copilot_available and copilot_suggestion.is_visible() then
 						copilot_suggestion.accept()
+						-- If it's not, accept the luasnip expansion if it's available
 					elseif luasnip.expand_or_locally_jumpable() then
 						luasnip.expand_or_jump()
 					else

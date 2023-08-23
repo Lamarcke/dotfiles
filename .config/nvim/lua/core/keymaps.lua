@@ -3,8 +3,8 @@
 
 -- Delete to oblivion
 -- cut with visual mode + x instead
-vim.keymap.set("n", "d", '"_d', { noremap = true })
-vim.keymap.set("n", "D", '"_D', { noremap = true })
+vim.keymap.set({ "n", "v" }, "d", '"_d', { noremap = false })
+vim.keymap.set({ "n", "v" }, "D", '"_D', { noremap = false })
 
 -- better indenting
 vim.keymap.set("v", "<", "<gv")
@@ -64,12 +64,9 @@ vim.keymap.set("n", "<M-S-q>", "<cmd>BufferLineCloseOthers<CR>", { silent = true
 vim.keymap.set("n", "<M-S-l>", "<cmd>BufferLineMoveNext<CR>", { silent = true })
 vim.keymap.set("n", "<M-S-h>", "<cmd>BufferLineMovePrev<CR>", { silent = true })
 
--- Hop
-vim.keymap.set("n", "s", "<cmd>HopChar2<CR>", { remap = true })
-vim.keymap.set("n", "S", "<cmd>HopWord<CR>", { remap = true })
-
 -- NvimTree (file manager)
 local tree_status, _ = pcall(require, "nvim-tree")
+local oil_status, oil = pcall(require, "oil")
 if tree_status then
 	vim.keymap.set("n", "<M-1>", "<cmd>NvimTreeToggle<CR>", { desc = "File navigation" })
 end
@@ -111,36 +108,34 @@ vim.keymap.set("n", "]d", function()
 end, { desc = "Go to next error" })
 
 -- Alpha
-vim.keymap.set({ "n", "x", "o" }, "<leader>;", "<cmd>Alpha<CR>", { desc = "Alpha Dashboard" })
+local alpha_s, _ = pcall(require, "alpha")
+if alpha_s then
+	vim.keymap.set({ "n", "v", "x", "o" }, "<leader>;", "<cmd>Alpha<CR>", { desc = "Alpha Dashboard" })
+end
 
 -- ToggleTerm
 -- I usually work with 2 terminals at most (one running the primary service/long commands, and another for running various commands)
 -- These are mapped similarly to Jetbrains' Run and Terminal tool windows keymaps.
-vim.keymap.set(
-	{ "n", "t", "x", "o" },
-	"<M-4>",
-	"<cmd>1ToggleTerm size=20 dir=CWD direction=horizontal<CR>",
-	{ desc = "Run window" }
-)
+vim.keymap.set({ "n", "t", "x", "o" }, "<M-4>", "<cmd>1ToggleTerm dir=CWD direction=float<CR>", { desc = "Run window" })
 vim.keymap.set(
 	{ "n", "t", "x", "o" },
 	"<M-F12>",
-	"<cmd>2ToggleTerm size=20 dir=CWD direction=horizontal<CR>",
+	"<cmd>2ToggleTerm dir=CWD direction=float<CR>",
 	{ desc = "Terminal window" }
 )
 
-local t_opts = { buffer = 0 }
-vim.keymap.set("t", "<esc>", [[<C-\><C-n>]], t_opts)
-vim.keymap.set("t", "jk", [[<C-\><C-n>]], t_opts)
-vim.keymap.set("t", "<C-h>", [[<Cmd>wincmd h<CR>]], t_opts)
-vim.keymap.set("t", "<C-j>", [[<Cmd>wincmd j<CR>]], t_opts)
-vim.keymap.set("t", "<C-k>", [[<Cmd>wincmd k<CR>]], t_opts)
-vim.keymap.set("t", "<C-l>", [[<Cmd>wincmd l<CR>]], t_opts)
-vim.keymap.set("t", "<C-w>", [[<C-\><C-n><C-w>]], t_opts)
+vim.keymap.set("t", "<esc>", [[<C-\><C-n>]])
+vim.keymap.set("t", "jk", [[<C-\><C-n>]])
+vim.keymap.set("t", "<C-h>", [[<Cmd>wincmd h<CR>]])
+vim.keymap.set("t", "<C-j>", [[<Cmd>wincmd j<CR>]])
+vim.keymap.set("t", "<C-k>", [[<Cmd>wincmd k<CR>]])
+vim.keymap.set("t", "<C-l>", [[<Cmd>wincmd l<CR>]])
+vim.keymap.set("t", "<C-w>", [[<C-\><C-n><C-w>]])
 
 -- WhichKey (leader) mappings
 local which_key_status, which_key = pcall(require, "which-key")
 if which_key_status then
+	-- Normal mode mappings
 	which_key.register({
 		f = {
 			name = "Find",
@@ -149,11 +144,14 @@ if which_key_status then
 			r = { "<cmd>Telescope oldfiles<cr>", "Recent files" },
 			l = { "<cmd>Telescope resume<cr>", "Resume last search" },
 			c = { "<cmd>Telescope colorscheme<cr>", "Pick colorscheme" },
-			p = { "<cmd>Telescope projects<cr>", "Projects" },
-			u = { "<cmd>UndoTree Toggle<cr>", "Undo tree" },
-		},
-		s = {
-			name = "Services",
+			u = {
+				function()
+					vim.cmd("UndotreeToggle")
+					-- If closing, won't do anything.
+					vim.cmd("UndotreeFocus")
+				end,
+				"Undo tree",
+			},
 		},
 		r = {
 			name = "LSP",
@@ -184,9 +182,9 @@ if which_key_status then
 		},
 		d = {
 			name = "Diagnostics",
-			t = { "<cmd>TroubleToggle<cr>", "trouble" },
+			d = { "<cmd>TroubleToggle<cr>", "All diagnostics" },
 			w = { "<cmd>TroubleToggle workspace_diagnostics<cr>", "workspace" },
-			d = { "<cmd>TroubleToggle document_diagnostics<cr>", "document" },
+			D = { "<cmd>TroubleToggle document_diagnostics<cr>", "document" },
 			q = { "<cmd>TroubleToggle quickfix<cr>", "quickfix" },
 			l = { "<cmd>TroubleToggle loclist<cr>", "loclist" },
 			r = { "<cmd>TroubleToggle lsp_references<cr>", "references" },
@@ -196,5 +194,18 @@ if which_key_status then
 			l = { "<cmd>Lazy<cr>", "Lazy" },
 			m = { "<cmd>Mason<cr>", "Mason" },
 		},
+		["/"] = {
+			{ "<Plug>(comment_toggle_linewise_current)", "Comment" },
+		},
 	}, { prefix = "<leader>" })
+
+	-- Visual mode mappings
+	which_key.register({
+		["/"] = {
+			{ "<Plug>(comment_toggle_linewise_visual)", "Comment" },
+		},
+	}, {
+		prefix = "<leader>",
+		mode = "v",
+	})
 end

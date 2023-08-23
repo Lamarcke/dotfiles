@@ -60,4 +60,6 @@ return {
 
 		alpha.setup(dashboard.config)
 	end,
+	-- Disabled for because it's not actually useful. Might remove later?
+	enabled = false,
 }
