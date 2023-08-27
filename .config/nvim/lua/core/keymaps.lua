@@ -115,11 +115,10 @@ end
 
 -- ToggleTerm
 -- I usually work with 2 terminals at most (one running the primary service/long commands, and another for running various commands)
--- These are mapped similarly to Jetbrains' Run and Terminal tool windows keymaps.
-vim.keymap.set({ "n", "t", "x", "o" }, "<M-4>", "<cmd>1ToggleTerm dir=CWD direction=float<CR>", { desc = "Run window" })
+vim.keymap.set({ "n", "t", "x", "o" }, "<M-3>", "<cmd>1ToggleTerm dir=CWD direction=float<CR>", { desc = "Run window" })
 vim.keymap.set(
 	{ "n", "t", "x", "o" },
-	"<M-F12>",
+	"<M-4>",
 	"<cmd>2ToggleTerm dir=CWD direction=float<CR>",
 	{ desc = "Terminal window" }
 )

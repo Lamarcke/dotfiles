@@ -57,6 +57,4 @@ return {
 			desc = "Lazydocker",
 		})
 	end,
-	-- Disabled in favor of WM, <C-z>, fg, bg, etc.
-	enabled = false,
 }

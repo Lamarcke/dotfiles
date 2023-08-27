@@ -26,13 +26,12 @@ return {
 			pickers = {
 				find_files = {
 					-- Show hidden files (.env, etc)
-					hidden = false,
+					hidden = true,
 					previewer = false,
 					layout_config = {
-						width = 0.6,
+						width = 0.5,
 						height = 0.7,
 					},
-					find_command = { "rg", "--files", "--hidden", "--glob", "!**/.git/*" },
 				},
 				live_grep = {
 					only_sort_text = true,
