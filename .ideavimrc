@@ -1,0 +1,153 @@
+" .ideavimrc is a configuration file for IdeaVim plugin. It uses
+"   the same commands as the original .vimrc configuration.
+" You can find a list of commands here: https://jb.gg/h38q75
+" Find more examples here: https://jb.gg/share-ideavimrc
+
+" Map leader to space
+let mapleader=" "
+
+
+set number                        " line numbers
+set relativenumber                " relative line numbers
+set hlsearch                      " highlight search occurrences
+set ignorecase                    " ignore case in search patterns
+set smartcase                     " no ignore case when pattern is uppercase
+set incsearch                     " show search results while typing
+set notimeout
+set smartindent                  " autoindent new lines
+set autoindent
+set tabstop=4                     " tab width
+set shiftwidth=4                  " indent width
+
+set gdefault                      " substitute all occurrences in line per default
+set history=10000                 " keep x lines of command line history
+set scrolloff=8                   " keep some lines before and after the cursor visible
+set clipboard=unnamedplus,unnamed,ideaput " integrate with system clipboard
+set ideajoin                        " use IDEA's join action (J by default)
+set ideavimsupport+=singleline
+
+" Don't use Ex mode, use Q for formatting.
+map Q gq
+
+" --- Enable IdeaVim plugins https://jb.gg/ideavim-plugins
+
+" Highlight copied text
+Plug 'machakann/vim-highlightedyank'
+" Commentary plugin
+Plug 'tpope/vim-commentary'
+Plug 'preservim/nerdtree'
+Plug 'tpope/vim-surround'
+
+" For multicursors, use Jetbrains <M-j>
+set which-key
+" let g:WhichKey_ShowVimActions = "true"
+
+" Keymaps
+
+" Delete to oblivion
+nnoremap d "_d
+nnoremap map D "_D
+vnoremap d "_d
+vnoremap D "_D
+
+" Better indentation in visual mode
+vnoremap < <gv
+vnoremap > >gv
+
+" Delete to oblivion
+
+nnoremap <esc> :noh<cr><esc>
+" Better scrolling
+nnoremap <C-d> <C-d>zz
+nnoremap <C-u> <C-u>zz
+
+nnoremap <A-j> :m .+1<CR>==
+nnoremap <A-k> :m .-2<CR>==
+inoremap <A-j> <Esc>:m .+1<CR>==gi
+inoremap <A-k> <Esc>:m .-2<CR>==gi
+vnoremap <A-j> :m '>+1<CR>gv=gv
+vnoremap <A-k> :m '<-2<CR>gv=gv
+
+"" -- Map IDE actions to IdeaVim -- https://jb.gg/abva4tck)
+map <leader>dd <Action>(Debug)
+map <leader>dr <Action>(Run)
+map <leader>ds <Action>(Stop)
+map <leader>dc <Action>(ChooseRunConfiguration)
+map <leader>dt <Action>(RunClass)
+
+
+" code analysis
+nmap gr <Action>(ShowUsages)
+nmap gi <Action>(GotoImplementation)
+nmap gs <Action>(GotoSuperMethod)
+
+" find related
+nmap <leader>ff <Action>(GotoFile)
+nmap <leader>ft <Action>(FindInPath)
+nmap <leader>fr <Action>(RecentFiles)
+" disabling tabs is recommended
+" Splitter actions
+" use "s" in nerdtree to open in vsplit, "i" to open in split
+map <C-w>v <Action>(SplitVertically)
+map <C-w>s <Action>(SplitHorizontally)
+map <C-w>h <Action>(PrevSplitter)
+map <C-h> <Action>(PrevSplitter)
+map <C-w>l <Action>(NextSplitter)
+map <C-l> <Action>(NextSplitter)
+map <C-w>q <Action>(CloseContent)
+
+" Tab actions
+map <M-q> <Action>(CloseContent)
+
+
+nmap <C-k> <Action>(ParameterInfo)
+imap <C-k> <Action>(ParameterInfo)
+
+
+nmap <leader>q <Action>( CloseAllEditors )
+nmap <leader>h :nohls<CR><esc>
+nmap <leader>w <Action>(SaveAll)
+
+nmap <leader>ri <Action>(Inline)
+nmap <leader>rR <Action>(RefactoringMenu)
+nmap <leader>rr <Action>(RenameElement)
+nmap <leader>rev <Action>(IntroduceVariable)
+vmap <leader>rev <Action>(IntroduceVariable)
+nmap <leader>rem <Action>(ExtractMethod)
+vmap <leader>rem <Action>(ExtractMethod)
+nmap <leader>rm <Action>(Move)
+vmap <leader>rm <Action>(Move)
+nmap <leader>ro <Action>(OptimizeImports)
+nmap <leader>rg <Action>(Generate)
+nmap <leader>rf <Action>(ReformatCode)
+
+" Goto
+map gu <Action>(GotoSuperMethod)
+map gi <Action>(GotoImplementation)
+map gd <Action>(GotoDeclaration)
+map gt <Action>(GotoTest)
+map gj <Action>(GotoNextError)
+map gk <Action>(GotoPreviousError)
+map ge <Action>(ShowErrorDescription)
+map gh <Action>(QuickJavaDoc)
+map gH <Action>(QuickActions)
+map ga <Action>(ShowIntentionActions)
+map gf <Action>(ShowUsages)
+map gF <Action>(FindUsages)
+
+" shorthand
+map K <Action>(QuickJavaDoc)
+map E <Action>(ShowErrorDescription)
+
+" New ...
+map <leader>nn <Action>(NewElement)
+map <leader>nd <Action>(NewDir)
+map <leader>nf <Action>(NewFile)
+map <leader>np <Action>(NewProject)
+map <leader>nm <Action>(NewModule)
+
+nmap \c :e ~/.ideavimrc<CR>
+" Project management
+map <leader>pr <Action>(ManageRecentProjects)
+map <leader>pl <Action>(RecentProjectListGroup)
+map <leader>px <Action>(CloseProject)
