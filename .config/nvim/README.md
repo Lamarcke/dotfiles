@@ -14,6 +14,7 @@ Must be installed before this config:
 - python + pip
 - node + npm
 - ripgrep
+- fzf (optional, for actual terminal use)
 - lazygit (optional, for <leader> + gg)
 
 ## Install Instructions
