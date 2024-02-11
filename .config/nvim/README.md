@@ -7,6 +7,14 @@
 ## Preview
 ![image](https://github.com/Lamarcke/dotfiles/assets/23425058/c1fd506e-a17f-4bee-8fb5-9cf246d199a2)
 
+## Dependencies
+Must be installed before this config:
+- git
+- make
+- python + pip
+- node + npm
+- ripgrep
+- lazygit (optional, for <leader> + gg)
 
 ## Install Instructions
 
@@ -24,3 +32,4 @@ Open Neovim with this config:
 ```sh
 NVIM_APPNAME=Lamarcke/dotfiles/.config/nvim nvim
 ```
+
